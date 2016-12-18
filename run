@@ -1,0 +1,12 @@
+#!/bin/bash
+
+docker kill justhideme >/dev/null 2>&1
+docker rm -f justhideme >/dev/null 2>&1
+
+docker run -d -p 80:80 -p 443:443 --name justhideme \
+  -e DOMAIN="justhide.me" \
+  -e GIT_BRANCH="master --recursive" \
+  -e GIT_REPO="https://github.com/justhideme/justhideme.github.io" \
+  richarvey/nginx-static:latest 
+
+nohup sh -c "docker wait justhideme ; docker rm -f justhideme" > /dev/null 2>&1 &
